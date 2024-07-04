@@ -32,5 +32,5 @@ function verifyJWT(token) {
         }
         return decoded;
     })
-    // return payload
+    return payload
 }
