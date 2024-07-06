@@ -38,6 +38,10 @@ const userSchema = new Schema(
       type: Boolean,
       default: false,
     },
+    order: [{
+      type: Schema.Types.ObjectId,
+      ref: 'Order'
+    }],
   },
   {
     timestamps: true,
