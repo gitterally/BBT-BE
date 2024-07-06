@@ -6,7 +6,9 @@ module.exports = {
     loginUser,
     checkLogin,
     checkPermission,
-    logoutUser
+    logoutUser,
+    editUser,
+    deleteUser,
 }
 
 async function signup(req, res) {
@@ -73,4 +75,21 @@ async function signup(req, res) {
         res.status(500).json({ errorMsg: err.message });
     }
   }
+
+  async function deleteUser(req, res) {
+    try {
+      const user = await Users.deleteUser(req.body);
+   
+    } catch (err) {
+        res.status(500).json({ errorMsg: err.message });
+    }
+  } 
   
+  async function editUser(req, res) {
+      try {
+        const user = await Users.editUser(req.body);
+
+      } catch (err) {
+          res.status(500).json({ errorMsg: err.message });
+      }
+  }
