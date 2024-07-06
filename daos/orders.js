@@ -8,21 +8,25 @@ const commentSchema = new Schema(
       type: String,
       enum: ["none", "normal", "honey", "stevia"],
       required: true,
+      default: "stevia",
     },
     
     sugarLevel: {
       type: String,
       enum: ["25%", "50%","75%","100%"],
       required: true,
+      default: "50%",
     },
     iceLevel: {
       type: String,
       enum: ["normal", "less","little","none"],
       required: true,
+      default: "normal",
     },
     content: {
       type: String,
       required: true,
+      default:" ",
     },
     rating: {
       type: Number,
@@ -36,11 +40,63 @@ const commentSchema = new Schema(
   }
 );
 
+// Subdocument schema for toppings with quantity
+const toppingSchema = new Schema(
+  {
+    topping: {
+      type: Schema.Types.ObjectId,
+      ref: "Product",
+      required: true,
+    },
+    quantity: {
+      type: Number,
+      required: true,
+      default: 1,
+      min: 1,
+    },
+  },
+  {
+    _id: false,
+    timestamps: false,
+  }
+);
+
+// Subdocument schema for drinks including toppings
+const drinkSchema = new Schema(
+  {
+    mainProduct: {
+      type: Schema.Types.ObjectId,
+      ref: "Product",
+      required: true,
+    },
+    toppings: [toppingSchema],
+  },
+  {
+    _id: false,
+    timestamps: false,
+  }
+);
+
+
 const orderSchema = new Schema(
   {
-    order: {
+    orderID: {
       type: String,
       required: true,
+    },
+    // drinks: [drinkSchema],
+    total: {
+      type: Number,
+      required: true,
+    },
+    // customer: {
+    //   type: Schema.Types.ObjectId,
+    //   ref: "User",
+    // },
+    status: {
+      type: String,
+      enum: ["pending", "processing", "completed", "cancelled"],
+      default: "pending",
     },
     created_at: {
       type: Number,
@@ -48,13 +104,9 @@ const orderSchema = new Schema(
     expire_at: {
       type: Number,
     },
-    is_cancelled: {
+    is_paid: {
       type: Boolean,
-      default: false,
-    },
-    is_done: {
-      type: Boolean,
-      default: false,
+      default: true,
     },
     comment:[commentSchema],
   },

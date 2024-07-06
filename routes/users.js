@@ -15,6 +15,13 @@ router.post('/signup', usersCtrl.signup)
 router.get('/login', usersCtrl.loginDetails)
 router.post("/login", usersCtrl.loginUser);
 
+/* GET order details */
+
+router.get('/order', securityMiddleware.checkPermission, usersCtrl.orderDetails)
+router.post("/order", securityMiddleware.checkPermission,usersCtrl.createOrder);
+
+
+
 router.post('/checklogin', securityMiddleware.checkLogin, usersCtrl.checkLogin)
 router.post('/checkpermission', securityMiddleware.checkPermission, usersCtrl.checkPermission)
 

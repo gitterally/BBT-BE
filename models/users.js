@@ -1,11 +1,15 @@
 const daoUser = require("../daos/users");
 const utilSecurity = require("../util/security")
+const daoOrder = require("../daos/orders");
+const daoProduct =  require("../daos/product");
 
 module.exports = {
     signup,
     loginDetails,
     loginUser,
-    logoutUser
+    logoutUser,
+    createOrder,
+    orderDetails,
 }
 
 // [a,b,c] vs {a:a, b:b, c:c} 
@@ -70,3 +74,36 @@ async function loginDetails(body) {
     await daoUser.updateOne({"email": body.email}, {token: null, expire_at: null})
     return {success: true, data: "logout successful!"}
   }
+
+  async function createOrder(body) {
+    // const order = await daoUser.findOne({"order": body.order});
+    // console.log(order);
+    // if (order) {
+    //   return {success: false, error: "order already exist"};
+    // }
+    const newOrder = await daoOrder.create(body);
+    return {success: true, data: newOrder};
+  }
+
+// Function to get order details
+async function orderDetails(body) {
+  const orderDetailsSchema = {
+      "order": 1,
+      "comment": 1,
+  };
+
+  const order = await daoOrder.findOne({ "order": body.order }, orderDetailsSchema).populate({
+      path: 'drinks.mainProduct',
+      select: 'name category price inStock'
+  }).populate({
+      path: 'drinks.toppings.topping',
+      select: 'name category price inStock'
+  });
+
+  if (!order) {
+      return { success: false, error: "Order not found" };
+  }
+
+  return { success: true, data: order };
+}
+
