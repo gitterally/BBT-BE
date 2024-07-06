@@ -84,15 +84,11 @@ const orderSchema = new Schema(
       type: String,
       required: true,
     },
-    // drinks: [drinkSchema],
+    drinks: [drinkSchema],
     total: {
       type: Number,
       required: true,
     },
-    // customer: {
-    //   type: Schema.Types.ObjectId,
-    //   ref: "User",
-    // },
     status: {
       type: String,
       enum: ["pending", "processing", "completed", "cancelled"],
