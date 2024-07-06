@@ -44,6 +44,50 @@ const userSchema = new Schema(
   }
 );
 
+
+const productSchema = new Schema(
+  {
+    productName: {
+      type: String,
+      required: true,
+    },
+    productPrice: {
+      type: Number,
+      required: true,
+    },
+    productType: {
+      type: String,
+      required: true,
+    },
+    productComponents: [
+      {
+        componentName: {
+          type: String,
+          required: true,
+        },
+        componentPrice: {
+          type: Number,
+          required: true,
+        },
+      },
+    ],
+    productToppings: [
+      {
+        toppingName: {
+          type: String,
+          required: true,
+        },
+        ctoppingPrice: {
+          type: Number,
+          required: true,
+        },
+      },
+    ],
+  },
+  {
+    timestamps: true,
+  }
+);
 // Compile the schema into a model and export it
 // highlight-next-line
 module.exports = mongoose.model("User", userSchema);
