@@ -1,3 +1,5 @@
+const { create } = require("../daos/orders");
+const product = require("../daos/product");
 const Users = require("../models/users");
 
 module.exports = {
@@ -9,6 +11,8 @@ module.exports = {
     logoutUser,
     createOrder,
     orderDetails,
+    productDetails,
+    createProduct,
 }
 
 async function signup(req, res) {
@@ -134,3 +138,25 @@ async function signup(req, res) {
     }
   }
   
+
+  async function productDetails(req, res) {
+    try {
+      const product = await Users.productDetails(req.query);
+
+      res.json(product)
+      } catch (err) {
+        console.log(err);
+        res.status(500).json({ err });
+        }
+      }
+
+
+  async function createProduct(req, res) {
+    try {
+      const product = await Users.createProduct(req.body);
+      res.json(product);
+    } catch (err) {
+      console.log(err);
+      res.status(500).json({ error: err.message });
+    }
+  }

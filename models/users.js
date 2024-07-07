@@ -10,6 +10,8 @@ module.exports = {
     logoutUser,
     createOrder,
     orderDetails,
+    productDetails,
+    createProduct,
 }
 
 // [a,b,c] vs {a:a, b:b, c:c} 
@@ -166,8 +168,7 @@ async function orderDetails(body, userEmail) {
     }
 
     // Find the order that belongs to the user
-    const order = await daoOrder.findOne({ 
-      "order": body.order,
+    const order = await daoOrder.find({ 
       "_id": { $in: user.order } // Assuming user.order is an array of order IDs
     }, orderDetailsSchema).populate({
       path: 'drinks.mainProduct',
@@ -190,3 +191,25 @@ async function orderDetails(body, userEmail) {
   }
 }
 
+async function createProduct(body) {
+  const product = await daoProduct.findOne({"name": body.name});
+  if (product) {
+    return {success: false, error: "product already exist"};
+    }
+    const newProduct = await daoProduct.create(body);
+    return {success: true, data: newProduct};
+  }
+
+
+  async function productDetails(body) {
+    const productDetailsSchema = {
+      "name": 1,
+      "price": 1,
+      "category": 1,
+      "inStock": 1,}
+      const product = await daoProduct.findOne({ "name": body.name }, productDetailsSchema);
+       if (!product) {
+        return { success: false, error: "Product not found" };
+    }
+    return { success: true, data: product };
+  }

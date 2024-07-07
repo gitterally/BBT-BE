@@ -20,6 +20,11 @@ router.post("/login", usersCtrl.loginUser);
 router.get('/order', securityMiddleware.checkPermission, usersCtrl.orderDetails)
 router.post("/order", securityMiddleware.checkPermission,usersCtrl.createOrder);
 
+/* GET product details */
+
+router.get('/product', securityMiddleware.checkPermission, usersCtrl.productDetails) //by query
+router.post("/product", securityMiddleware.checkAdminPermission,usersCtrl.createProduct);
+
 
 
 router.post('/checklogin', securityMiddleware.checkLogin, usersCtrl.checkLogin)
