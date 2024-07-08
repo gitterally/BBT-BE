@@ -151,12 +151,16 @@ async function orderDetails(body, userEmail) {
     "comment": 1,
     "total": 1,
     "status": 1,
+    "createdAt": 1,
+    "updatedAt":1,
     "created_at": 1,
     "expire_at": 1,
     "is_paid": 1,
     "drinks.mainProduct": 1,
+    "drinks.quantity":1,
     "drinks.toppings.topping": 1,
     "drinks.toppings.quantity": 1,
+    "drinks.comment": 1,
   };
 
   try {
