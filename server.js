@@ -9,6 +9,7 @@ var securityMiddleware = require('./middlewares/security');
 
 var indexRouter = require('./routes/index');
 var usersRouter = require('./routes/users');
+var productRouter = require('./routes/product');
 
 require('dotenv').config();
 require("./client/mongo");
@@ -29,6 +30,7 @@ app.use(securityMiddleware.checkJWT); // is just to set req.user
 
 app.use('/', indexRouter);
 app.use('/users', usersRouter);
+app.use('/product', productRouter);
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {
@@ -45,5 +47,7 @@ app.use(function(err, req, res, next) {
   res.status(err.status || 500);
   res.render('error');
 });
+
+
 
 module.exports = app;
