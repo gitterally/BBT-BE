@@ -13,9 +13,9 @@ const commentSchema = new Schema(
     
     sugarLevel: {
       type: String,
-      enum: ["25%", "50%","75%","100%"],
+      enum: ["0%", "25%", "50%","75%","100%"],
       required: true,
-      default: "50%",
+      default: "0%",
     },
     iceLevel: {
       type: String,
@@ -25,8 +25,8 @@ const commentSchema = new Schema(
     },
     content: {
       type: String,
-      required: true,
-      default:" ",
+      required: false,
+      default:"",
     },
     rating: {
       type: Number,
@@ -41,49 +41,7 @@ const commentSchema = new Schema(
   }
 );
 
-// Subdocument schema for toppings with quantity
-// const toppingSchema = new Schema(
-//   {
-//     topping: {
-//       type: Schema.Types.Mixed,
-//       ref: "Product",
-//       required: true,
-//     },
-//     quantity: {
-//       type: Number,
-//       required: true,
-//       default: 1,
-//       min: 1,
-//     },
-//   },
-//   {
-//     _id: false,
-//     timestamps: false,
-//   }
-// );
 
-// Subdocument schema for drinks including toppings
-// const drinkSchema = new Schema(
-//   {
-//     mainProduct: {
-//       type: Schema.Types.Mixed,
-//       ref: "Product",
-//       required: true,
-//     },
-//     toppings: [toppingSchema],
-//     quantity: {
-//       type: Number,
-//       required: true,
-//       default: 1,
-//       min: 1,
-//     },
-//     comment: [commentSchema],
-//   },
-//   {
-//     _id: false,
-//     timestamps: false,
-//   }
-// );
 
 const drinkSchema = new Schema(
   {

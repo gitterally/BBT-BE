@@ -13,6 +13,7 @@ module.exports = {
     orderDetails,
     productDetails,
     createProduct,
+    allProductDetails
 }
 
 async function signup(req, res) {
@@ -160,3 +161,15 @@ async function signup(req, res) {
       res.status(500).json({ error: err.message });
     }
   }
+
+  async function allProductDetails(req, res) {
+    try {
+      const product = await Users.allProductDetails(req.query);
+
+      res.json(product)
+      } catch (err) {
+        console.log(err);
+        res.status(500).json({ err });
+        }
+      }
+

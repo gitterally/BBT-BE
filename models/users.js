@@ -2,6 +2,7 @@ const daoUser = require("../daos/users");
 const utilSecurity = require("../util/security")
 const daoOrder = require("../daos/orders");
 const daoProduct =  require("../daos/product");
+const crypto = require('crypto');
 
 module.exports = {
     signup,
@@ -12,6 +13,8 @@ module.exports = {
     orderDetails,
     productDetails,
     createProduct,
+    allProductDetails
+    
 }
 
 // [a,b,c] vs {a:a, b:b, c:c} 
@@ -19,6 +22,17 @@ module.exports = {
 // object.find(a) // only check the a drawer
 // usertypes ("admin", "normal")
 // admin -> list of admins
+
+function generateUniqueOrderID() {
+  const date = new Date();
+  const MM = String(date.getMonth() + 1).padStart(2, '0');
+  const DD = String(date.getDate()).padStart(2, '0');
+  const SSS = String(date.getMilliseconds()).padStart(3, '0');
+  
+  const formattedDate = `${MM}${DD}${SSS}`;
+  const randomString = crypto.randomBytes(2).toString('hex'); // Generates a 4-character hex string
+  return `${formattedDate}${randomString}`;
+}
 
 async function signup(body) {
     //
@@ -92,13 +106,17 @@ async function loginDetails(body) {
       console.log(orderData);
       const { userEmail, ...orderDetails } = orderData;
 
+      // Generate a unique order ID
+      orderDetails.orderID = await generateUniqueOrderID();
+      console.log(orderDetails);
+
   
       // Check if the order already exists
-      const existingOrder = await daoOrder.findOne({ orderID: orderDetails.orderID });
+      // const existingOrder = await daoOrder.findOne({ orderID: orderDetails.orderID });
   
-      if (existingOrder) {
-        throw new Error('Order already exists');
-      }
+      // if (existingOrder) {
+      //   throw new Error('Order already exists');
+      // }
   
       // Create the order
       const newOrder = await daoOrder.create(orderDetails);
@@ -216,4 +234,21 @@ async function createProduct(body) {
         return { success: false, error: "Product not found" };
     }
     return { success: true, data: product };
+  }
+
+  async function allProductDetails() {
+    const productDetailsSchema = {
+      "name": 1,
+      "price": 1,
+      "category": 1,
+      "inStock": 1
+    };
+    
+    const products = await daoProduct.find({}, productDetailsSchema);
+    
+    if (!products || products.length === 0) {
+      return { success: false, error: "No products found" };
+    }
+    
+    return { success: true, data: products };
   }
