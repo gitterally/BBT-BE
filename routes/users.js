@@ -15,6 +15,20 @@ router.post('/signup', usersCtrl.signup)
 router.get('/login', usersCtrl.loginDetails)
 router.post("/login", usersCtrl.loginUser);
 
+/* GET order details */
+
+router.get('/order', securityMiddleware.checkPermission, usersCtrl.orderDetails)
+router.post("/order", securityMiddleware.checkPermission,usersCtrl.createOrder);
+
+/* GET product details */
+
+router.get('/product', usersCtrl.productDetails) //by query
+router.get('/products', usersCtrl.allProductDetails) //by query
+// router.get('/product/:category', usersCtrl.productDetailsByCategory);
+router.post("/product", securityMiddleware.checkAdminPermission,usersCtrl.createProduct);
+
+
+
 router.post('/checklogin', securityMiddleware.checkLogin, usersCtrl.checkLogin)
 router.post('/checkpermission', securityMiddleware.checkPermission, usersCtrl.checkPermission)
 
