@@ -11,9 +11,11 @@ module.exports = {
     logoutUser,
     createOrder,
     orderDetails,
+    updateOrder,
     productDetails,
     createProduct,
-    allProductDetails
+    allProductDetails,
+    allOrderDetails
     
 }
 
@@ -141,6 +143,28 @@ async function loginDetails(body) {
   }
 
 
+  async function updateOrder(orderId, body) {
+    try {
+       const updatedOrder = await daoOrder.findByIdAndUpdate(orderId, body, { new: true }).populate({
+        path: 'drinks.mainProduct',
+        select: 'name category price inStock'
+      }).populate({
+        path: 'drinks.toppings.topping',
+        select: 'name category price inStock'
+      });
+  
+      if (!updatedOrder) {
+        return { success: false, error: 'Order not found' };
+      }
+  
+      return { success: true, data: updatedOrder };
+    } catch (err) {
+      console.error('Error updating order:', err);
+      return { success: false, error: 'An error occurred while updating the order' };
+    }
+  };
+
+
 // Function to get order details
 // async function orderDetails(body) {
 //   const orderDetailsSchema = {
@@ -251,4 +275,44 @@ async function createProduct(body) {
     }
     
     return { success: true, data: products };
+  }
+
+
+
+
+
+  async function allOrderDetails() {
+    const orderDetailsSchema = {
+      "orderID": 1,
+      "comment": 1,
+      "total": 1,
+      "status": 1,
+      "createdAt": 1,
+      "updatedAt":1,
+      "created_at": 1,
+      "expire_at": 1,
+      "is_paid": 1,
+      "drinks.mainProduct": 1,
+      "drinks.quantity":1,
+      "drinks.toppings.topping": 1,
+      "drinks.toppings.quantity": 1,
+      "drinks.comment": 1,
+    };
+    
+    const orders = await daoOrder.find({}, orderDetailsSchema).populate({
+      path: 'drinks.mainProduct',
+      select: 'name category price inStock',
+      options: { strictPopulate: false }
+    }).populate({
+      path: 'drinks.toppings.topping',
+      select: 'name category price inStock',
+      options: { strictPopulate: false }
+    });
+
+    
+    if (!orders || orders.length === 0) {
+      return { success: false, error: "No orders found" };
+    }
+    
+    return { success: true, data: orders };
   }

@@ -11,9 +11,11 @@ module.exports = {
     logoutUser,
     createOrder,
     orderDetails,
+    updateOrder,
     productDetails,
     createProduct,
-    allProductDetails
+    allProductDetails,
+    allOrderDetails
 }
 
 async function signup(req, res) {
@@ -100,6 +102,20 @@ async function signup(req, res) {
     }
   }
 
+  async function updateOrder(req, res) {
+
+    const { orderId } = req.params;
+    const updateData = req.body;
+
+    try {
+       const result = await Users.updateOrder(orderId, updateData);
+       res.json(result);
+     } catch (err) {
+       console.log(err);
+       res.status(500).json({ error: err.message });
+     }
+  }
+
   // async function orderDetails(req, res) {
   //   try {
   //     const order = await Users.orderDetails(req.query);
@@ -172,4 +188,17 @@ async function signup(req, res) {
         res.status(500).json({ err });
         }
       }
+
+
+      async function allOrderDetails(req, res) {
+        try {
+          const product = await Users.allOrderDetails(req.query);
+    
+          res.json(product)
+          } catch (err) {
+            console.log(err);
+            res.status(500).json({ err });
+            }
+          }
+    
 
