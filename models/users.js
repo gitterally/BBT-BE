@@ -5,7 +5,9 @@ module.exports = {
     signup,
     loginDetails,
     loginUser,
-    logoutUser
+    logoutUser,
+    editUser,
+    deleteUser,
 }
 
 // [a,b,c] vs {a:a, b:b, c:c} 
@@ -69,4 +71,28 @@ async function loginDetails(body) {
     }
     await daoUser.updateOne({"email": body.email}, {token: null, expire_at: null})
     return {success: true, data: "logout successful!"}
+  }
+
+  async function editUser(body) {
+    if (!body.hasOwnProperty("email")) {
+      return {success: false, error: "missing email"};
+    }
+    const user = await daoUser.findOne({"email": body.email});  
+    if (user == null || Object.keys(user).length == 0) {
+      return {success: false, error: "user not found"};
+    }
+    await daoUser.updateOne({"email": body.email}, body);
+    return {success: true, data: "user updated!"}; 
+  }
+
+  async function deleteUser(body) {
+    if (!body.hasOwnProperty("email")) {
+      return {success: false, error: "missing email"};
+    }
+    const user = await daoUser.findOne({"email": body.email});
+    if (user == null || Object.keys(user).length == 0) {
+      return {success: false, error: "user not found"};
+    }
+    await daoUser.deleteOne({"email": body.email});
+    return {success: true, data: "Account deleted! :'( "};
   }

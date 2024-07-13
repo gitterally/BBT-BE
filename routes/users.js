@@ -18,6 +18,9 @@ router.post("/login", usersCtrl.loginUser);
 router.post('/checklogin', securityMiddleware.checkLogin, usersCtrl.checkLogin)
 router.post('/checkpermission', securityMiddleware.checkPermission, usersCtrl.checkPermission)
 
+router.post('/edituser', securityMiddleware.checkPermission, usersCtrl.editUser)
+router.post('/deleteuser', securityMiddleware.checkPermission, usersCtrl.deleteUser)
+
 router.post('/logout', securityMiddleware.checkPermission, usersCtrl.logoutUser);
 
 module.exports = router;
