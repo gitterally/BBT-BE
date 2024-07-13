@@ -9,13 +9,14 @@ module.exports = {
     checkLogin,
     checkPermission,
     logoutUser,
-    editUser,
+    updateUser,
     deleteUser,
     createOrder,
     orderDetails,
     productDetails,
     createProduct,
-    allProductDetails
+    allProductDetails,
+    deleteOrder
 }
 
 async function signup(req, res) {
@@ -61,6 +62,34 @@ async function signup(req, res) {
         res.status(500).json({ errorMsg: err.message });
     }
   }
+
+  // Function to delete a user
+async function deleteUser(req, res) {
+  try {
+    const { email } = req.params; // Assuming email is passed as a URL parameter
+    await deleteUserByEmail(email);
+    res.json({ success: true, message: 'User deleted successfully' });
+  } catch (err) {
+    console.log(err);
+    res.status(500).json({ error: err.message });
+  }
+}
+
+// Function to update a user
+async function updateUser(req, res) {
+  try {
+    const { email } = req.params; // Assuming email is passed as a URL parameter
+    const updateData = req.body; // Assuming the new user data is passed in the request body
+    await updateUserByEmail(email, updateData);
+    res.json({ success: true, message: 'User updated successfully' });
+  } catch (err) {
+    console.log(err);
+    res.status(500).json({ error: err.message });
+  }
+}
+
+
+
 
   function checkLogin(req, res) {
     res.json({user: req.user});
@@ -174,3 +203,15 @@ async function signup(req, res) {
         }
       }
 
+async function deleteOrder(req, res) {
+  try {
+    const userEmail = req.user.payload.email; // Assuming req.user contains authenticated user info
+    const orderId = req.params.orderId; // Assuming the order ID is passed as a URL parameter
+
+    const result = await Users.deleteOrder(orderId, userEmail);
+    res.json(result);
+  } catch (err) {
+    console.error('Error in deleteOrder controller:', err);
+    res.status(500).json({ success: false, error: err.message });
+  }
+}
