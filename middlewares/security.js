@@ -1,10 +1,10 @@
 const utilSecurity = require("../util/security");
 
 module.exports = {
-  checkJWT,
-  checkLogin,
-  checkPermission,
-  checkAdminPermission,
+    checkJWT,
+    checkLogin,
+    checkPermission,
+    checkAdminPermission,
 };
 
 // set req.user
@@ -34,19 +34,23 @@ function checkLogin(req, res, next) {
 
 // make use of req.user check if they are owner or if they are admin
 function checkPermission(req, res, next) {
-  // Status code of 401 is Unauthorized
-  if (!req.user) return res.status(401).json("Unauthorized");
-  // if you are not the owner and you are not admin -> unauthorized
-  if (req.body.email != req.user.email && req.user.is_admin == false)
-    return res.status(401).json("Unauthorized");
-  next();
-}
+    // Status code of 401 is Unauthorized
+    if (!req.user) return res.status(401).json("Unauthorized");
+    // if you are not the owner and you are not admin -> unauthorized
+    if (req.body.email != req.user.email && req.user.is_admin == false) return res.status(401).json("Unauthorized"); 
+    next();
+  };
 
-function checkAdminPermission(req, res, next) {
-  // Status code of 401 is Unauthorized
-  if (!req.user) return res.status(401).json("Unauthorized");
-  // if you are not the owner and you are not admin -> unauthorized
-  if (req.body.email != req.user.email && req.user.is_admin == true)
-    return res.status(401).json("Unauthorized");
-  next();
-}
+  // make use of req.user check if they are admin
+  function checkAdminPermission(req, res, next) {
+    // Status code of 401 is Unauthorized
+    console.log(req.user);
+    if (!req.user) return res.status(401).json("Unauthorized");
+  
+    // Check if the user is admin
+    if (req.body.email != req.user.payload.email && req.user.payload.is_admin) {
+      return next();
+    } else {
+      return res.status(401).json("Unauthorized");
+    }
+  };
