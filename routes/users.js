@@ -17,8 +17,8 @@ router.post("/login", usersCtrl.loginUser);
 
 /* GET order details */
 
-router.get('/order', securityMiddleware.checkPermission, usersCtrl.orderDetails)
-router.post("/order", securityMiddleware.checkPermission,usersCtrl.createOrder);
+router.post('/order', securityMiddleware.checkPermission, usersCtrl.orderDetails)
+router.post("/neworder", securityMiddleware.checkPermission,usersCtrl.createOrder);
 
 /* Update order details */
 router.patch("/order/:orderId", securityMiddleware.checkAdminPermission,usersCtrl.updateOrder);
@@ -27,7 +27,7 @@ router.patch("/order/:orderId", securityMiddleware.checkAdminPermission,usersCtr
 
 /* GET all orders details */
 
-router.get('/orders', securityMiddleware.checkAdminPermission, usersCtrl.allOrderDetails)
+router.post('/orders', securityMiddleware.checkAdminPermission, usersCtrl.allOrderDetails)
 
 /* GET product details */
 

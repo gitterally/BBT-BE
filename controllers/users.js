@@ -190,15 +190,15 @@ async function signup(req, res) {
       }
 
 
-      async function allOrderDetails(req, res) {
-        try {
-          const product = await Users.allOrderDetails(req.query);
-    
-          res.json(product)
-          } catch (err) {
-            console.log(err);
-            res.status(500).json({ err });
-            }
-          }
+  async function allOrderDetails(req, res) {
+    try {
+      const orders = await Users.allOrderDetails(req.query);
+
+      res.json(orders)
+      } catch (err) {
+        console.log(err);
+        res.status(500).json({ err });
+        }
+      }
     
 
