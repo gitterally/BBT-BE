@@ -38,7 +38,7 @@ router.patch("/order/:orderId", securityMiddleware.checkAdminPermission,usersCtr
 
 /* GET all orders details */
 
-router.get('/orders', securityMiddleware.checkAdminPermission, usersCtrl.allOrderDetails)
+router.post('/orders', securityMiddleware.checkAdminPermission, usersCtrl.allOrderDetails)
 
 /* GET product details */
 
