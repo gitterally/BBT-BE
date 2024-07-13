@@ -13,6 +13,7 @@ module.exports = {
     deleteUser,
     createOrder,
     orderDetails,
+    updateOrder,
     productDetails,
     createProduct,
     allProductDetails,
@@ -128,6 +129,20 @@ async function updateUser(req, res) {
       console.log(err);
       res.status(500).json({ error: err.message });
     }
+  }
+
+  async function updateOrder(req, res) {
+
+    const { orderId } = req.params;
+    const updateData = req.body;
+
+    try {
+       const result = await Users.updateOrder(orderId, updateData);
+       res.json(result);
+     } catch (err) {
+       console.log(err);
+       res.status(500).json({ error: err.message });
+     }
   }
 
   // async function orderDetails(req, res) {

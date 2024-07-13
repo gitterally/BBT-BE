@@ -31,12 +31,24 @@ router.post("/order", securityMiddleware.checkPermission,usersCtrl.createOrder);
 /* delete order */
 router.delete('/order/:orderId', usersCtrl.deleteOrder);
 
+/* Update order details */
+router.patch("/order/:orderId", securityMiddleware.checkAdminPermission,usersCtrl.updateOrder);
+
+// router.put('/order/:orderId', securityMiddleware.checkAdminPermission, usersCtrl.replaceOrder);
+
+/* GET all orders details */
+
+router.get('/orders', securityMiddleware.checkAdminPermission, usersCtrl.allOrderDetails)
+
 /* GET product details */
 
 router.get('/product', usersCtrl.productDetails) //by query
 router.get('/products', usersCtrl.allProductDetails) //by query
 // router.get('/product/:category', usersCtrl.productDetailsByCategory);
 router.post("/product", securityMiddleware.checkAdminPermission,usersCtrl.createProduct);
+
+// router.put('/product', securityMiddleware.checkAdminPermission, usersCtrl.updateProduct);
+
 
 
 
