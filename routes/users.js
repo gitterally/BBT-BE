@@ -1,6 +1,6 @@
 var express = require('express');
 var router = express.Router();
-var usersCtrl = require('../controllers/users');
+var usersCtrl = require('../controllers/users.js');
 var securityMiddleware = require('../middlewares/security');
 
 const { deleteUser, updateUser } = require('../controllers/users.js');
@@ -38,7 +38,7 @@ router.patch("/order/:orderId", securityMiddleware.checkAdminPermission,usersCtr
 
 /* GET all orders details */
 
-router.post('/orders', securityMiddleware.checkAdminPermission, usersCtrl.allOrderDetails)
+router.post('/orders', securityMiddleware.checkAdminPermission, usersCtrl.orderDetails)
 
 /* GET product details */
 
@@ -55,7 +55,6 @@ router.post("/product", securityMiddleware.checkAdminPermission,usersCtrl.create
 router.post('/checklogin', securityMiddleware.checkLogin, usersCtrl.checkLogin)
 router.post('/checkpermission', securityMiddleware.checkPermission, usersCtrl.checkPermission)
 
-router.post('/edituser', securityMiddleware.checkPermission, usersCtrl.editUser)
 router.post('/deleteuser', securityMiddleware.checkPermission, usersCtrl.deleteUser)
 
 router.post('/logout', securityMiddleware.checkPermission, usersCtrl.logoutUser);

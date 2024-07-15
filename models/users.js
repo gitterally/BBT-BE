@@ -13,11 +13,11 @@ module.exports = {
   updateUserByEmail,
   createOrder,
   orderDetails,
-    updateOrder,
+  updateOrder,
   productDetails,
   createProduct,
-  allProductDetails,,
-    allOrderDetails
+  allProductDetails,
+  allOrderDetails,
   deleteOrder,
 };
 
@@ -110,7 +110,10 @@ async function deleteUserByEmail(email) {
 }
 
 async function updateUserByEmail(email, updateData) {
-  const result = await daoUser.updateOne({ email: email }, { $set: updateData });
+  const result = await daoUser.updateOne(
+    { email: email },
+    { $set: updateData }
+  );
   return result;
 }
 
@@ -162,28 +165,32 @@ async function createOrder(orderData) {
   }
 }
 
-
-  async function updateOrder(orderId, body) {
-    try {
-       const updatedOrder = await daoOrder.findByIdAndUpdate(orderId, body, { new: true }).populate({
-        path: 'drinks.mainProduct',
-        select: 'name category price inStock'
-      }).populate({
-        path: 'drinks.toppings.topping',
-        select: 'name category price inStock'
+async function updateOrder(orderId, body) {
+  try {
+    const updatedOrder = await daoOrder
+      .findByIdAndUpdate(orderId, body, { new: true })
+      .populate({
+        path: "drinks.mainProduct",
+        select: "name category price inStock",
+      })
+      .populate({
+        path: "drinks.toppings.topping",
+        select: "name category price inStock",
       });
-  
-      if (!updatedOrder) {
-        return { success: false, error: 'Order not found' };
-      }
-  
-      return { success: true, data: updatedOrder };
-    } catch (err) {
-      console.error('Error updating order:', err);
-      return { success: false, error: 'An error occurred while updating the order' };
-    }
-  };
 
+    if (!updatedOrder) {
+      return { success: false, error: "Order not found" };
+    }
+
+    return { success: true, data: updatedOrder };
+  } catch (err) {
+    console.error("Error updating order:", err);
+    return {
+      success: false,
+      error: "An error occurred while updating the order",
+    };
+  }
+}
 
 // Function to get order details
 // async function orderDetails(body) {
@@ -274,12 +281,12 @@ async function deleteOrder(orderId, userEmail) {
     // Assuming there's a way to check if a user is an admin
     const user = await daoUser.findOne({ email: userEmail });
     if (!user || !user.isAdmin) {
-      throw new Error('Unauthorized: Only admin users can delete orders');
+      throw new Error("Unauthorized: Only admin users can delete orders");
     }
 
     return await daoOrder.deleteOrderById(orderId);
   } catch (err) {
-    console.error('Error deleting order:', err);
+    console.error("Error deleting order:", err);
     return { success: false, error: err.message };
   }
 }
@@ -310,59 +317,57 @@ async function productDetails(body) {
   return { success: true, data: product };
 }
 
-  async function allProductDetails() {
-    const productDetailsSchema = {
-      "name": 1,
-      "price": 1,
-      "category": 1,
-      "inStock": 1
-    };
-    
-    const products = await daoProduct.find({}, productDetailsSchema);
-    
-    if (!products || products.length === 0) {
-      return { success: false, error: "No products found" };
-    }
-    
-    return { success: true, data: products };
+async function allProductDetails() {
+  const productDetailsSchema = {
+    name: 1,
+    price: 1,
+    category: 1,
+    inStock: 1,
+  };
+
+  const products = await daoProduct.find({}, productDetailsSchema);
+
+  if (!products || products.length === 0) {
+    return { success: false, error: "No products found" };
   }
 
+  return { success: true, data: products };
+}
 
+async function allOrderDetails() {
+  const orderDetailsSchema = {
+    orderID: 1,
+    comment: 1,
+    total: 1,
+    status: 1,
+    createdAt: 1,
+    updatedAt: 1,
+    created_at: 1,
+    expire_at: 1,
+    is_paid: 1,
+    "drinks.mainProduct": 1,
+    "drinks.quantity": 1,
+    "drinks.toppings.topping": 1,
+    "drinks.toppings.quantity": 1,
+    "drinks.comment": 1,
+  };
 
-
-
-  async function allOrderDetails() {
-    const orderDetailsSchema = {
-      "orderID": 1,
-      "comment": 1,
-      "total": 1,
-      "status": 1,
-      "createdAt": 1,
-      "updatedAt":1,
-      "created_at": 1,
-      "expire_at": 1,
-      "is_paid": 1,
-      "drinks.mainProduct": 1,
-      "drinks.quantity":1,
-      "drinks.toppings.topping": 1,
-      "drinks.toppings.quantity": 1,
-      "drinks.comment": 1,
-    };
-    
-    const orders = await daoOrder.find({}, orderDetailsSchema).populate({
-      path: 'drinks.mainProduct',
-      select: 'name category price inStock',
-      options: { strictPopulate: false }
-    }).populate({
-      path: 'drinks.toppings.topping',
-      select: 'name category price inStock',
-      options: { strictPopulate: false }
+  const orders = await daoOrder
+    .find({}, orderDetailsSchema)
+    .populate({
+      path: "drinks.mainProduct",
+      select: "name category price inStock",
+      options: { strictPopulate: false },
+    })
+    .populate({
+      path: "drinks.toppings.topping",
+      select: "name category price inStock",
+      options: { strictPopulate: false },
     });
 
-    
-    if (!orders || orders.length === 0) {
-      return { success: false, error: "No orders found" };
-    }
-    
-    return { success: true, data: orders };
+  if (!orders || orders.length === 0) {
+    return { success: false, error: "No orders found" };
   }
+
+  return { success: true, data: orders };
+}
