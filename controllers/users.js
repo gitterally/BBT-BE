@@ -15,7 +15,8 @@ module.exports = {
     productDetails,
     createProduct,
     allProductDetails,
-    allOrderDetails
+    allOrderDetails,
+    updateProduct
 }
 
 async function signup(req, res) {
@@ -168,15 +169,15 @@ async function signup(req, res) {
       }
 
 
-  async function createProduct(req, res) {
-    try {
-      const product = await Users.createProduct(req.body);
-      res.json(product);
-    } catch (err) {
-      console.log(err);
-      res.status(500).json({ error: err.message });
+      async function createProduct(req, res) {
+        try {
+          const product = await daoProduct.create(req.body);
+          res.json(product);
+        } catch (err) {
+          console.log(err);
+          res.status(500).json({ error: err.message });
+        }
     }
-  }
 
   async function allProductDetails(req, res) {
     try {
@@ -202,3 +203,14 @@ async function signup(req, res) {
       }
     
 
+      async function updateProduct(req, res) {
+        try {
+          const productId = req.params.productId;
+          const updateData = req.body;
+          const updatedProduct = await daoProduct.update(productId, updateData);
+          res.json(updatedProduct);
+        } catch (err) {
+          console.log(err);
+          res.status(500).json({ error: err.message });
+        }
+      }
