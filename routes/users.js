@@ -34,9 +34,9 @@ router.post('/orders', securityMiddleware.checkAdminPermission, usersCtrl.allOrd
 router.get('/product', usersCtrl.productDetails) //by query
 router.get('/products', usersCtrl.allProductDetails) //by query
 // router.get('/product/:category', usersCtrl.productDetailsByCategory);
-router.post("/product", securityMiddleware.checkAdminPermission,usersCtrl.createProduct);
+router.post("/product", securityMiddleware.checkAdminPermission, usersCtrl.createProduct);
 
-// router.put('/product', securityMiddleware.checkAdminPermission, usersCtrl.updateProduct);
+router.put('/products/:productId', securityMiddleware.checkAdminPermission, usersCtrl.updateProduct);
 
 
 

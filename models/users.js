@@ -15,7 +15,8 @@ module.exports = {
     productDetails,
     createProduct,
     allProductDetails,
-    allOrderDetails
+    allOrderDetails,
+    update
     
 }
 
@@ -237,14 +238,15 @@ async function orderDetails(body, userEmail) {
   }
 }
 
-async function createProduct(body) {
-  const product = await daoProduct.findOne({"name": body.name});
-  if (product) {
-    return {success: false, error: "product already exist"};
-    }
-    const newProduct = await daoProduct.create(body);
-    return {success: true, data: newProduct};
+
+async function createProduct(productData) {
+  try {
+      const product = await daoProduct.create(productData);
+      return { success: true, data: product };
+  } catch (err) {
+      return { success: false, error: err.message };
   }
+}
 
 
   async function productDetails(body) {
@@ -276,10 +278,6 @@ async function createProduct(body) {
     
     return { success: true, data: products };
   }
-
-
-
-
 
   async function allOrderDetails() {
     const orderDetailsSchema = {
@@ -315,4 +313,14 @@ async function createProduct(body) {
     }
     
     return { success: true, data: orders };
+  }
+
+  async function update(productId, updateData) {
+    try {
+      const updatedProduct = await Product.findByIdAndUpdate(productId, updateData, { new: true });
+      return updatedProduct;
+    } catch (err) {
+      console.error('Error updating product:', err);
+      throw err;
+    }
   }
