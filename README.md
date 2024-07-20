@@ -69,7 +69,7 @@ To run the backend server using PM2 on port 3000, follow these steps:
 3. Start the backend server with PM2:
 
    ```
-   pm2 start app.js --name bbt-backend -- --port 3000
+   pm2 start ./bin/wwww --name bbt-backend -- --port 3000
    ```
 
 4. To ensure the backend starts automatically on system reboot:
