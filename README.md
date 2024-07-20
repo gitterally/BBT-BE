@@ -6,6 +6,21 @@ A full-stack MERN (MongoDB, Express, React, Node.js) ecommerce platform for bubb
 
 Visit the live website: [BBT Project](http://ec2-54-255-232-252.ap-southeast-1.compute.amazonaws.com)
 
+## Repositories
+
+- Frontend: [https://github.com/bfcxfm/BBT-Merch](https://github.com/bfcxfm/BBT-Merch)
+- Backend: [https://github.com/bfcxfm/BBT-BE](https://github.com/bfcxfm/BBT-BE)
+
+## Project Structure
+
+Our project is split into two main repositories:
+
+1. **Frontend (BBT-Merch)**: Contains the React-based user interface, including all client-side logic and components.
+
+2. **Backend (BBT-BE)**: Houses the Express.js server, API endpoints, database interactions, and business logic.
+
+This separation allows for independent development and scaling of the frontend and backend components.
+
 ## Deployment
 
 The application is deployed on an AWS EC2 instance with Nginx serving as a reverse proxy. This setup ensures that the backend is not directly exposed to the public internet, enhancing security.
